@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const commentSchema = new mongoose.Schema({
+  text: String,
+  username: String
+});
+
 const postSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -10,10 +15,11 @@ const postSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   }],
-  comments: {
-    type: Array,
-    default: []
-  },
+  comments: [
+    commentSchema
+    // type: Array,
+    // default: []
+  ],
   date: {
     type: Date,
     default: Date.now

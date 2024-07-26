@@ -16,6 +16,7 @@
               <img class="w-full h-full object-cover" src="/images/uploads/<%= user.picture %>" alt="">
             </div>
           </div>
+          <h6 class="text-xs mt-2 text-center">My Story</h6>
         </div>
       </a>
       <% stories.forEach(function(story){ %>
@@ -27,6 +28,7 @@
                 <img class="w-full h-full object-cover" src="/images/uploads/<%= story.user.picture %>" alt="">
               </div>
             </div>
+            <h6 class="text-xs mt-2 text-center"><%= story.user.username %></h6>
           </div>
         </a>
         <% }) %>
@@ -38,12 +40,13 @@
             <div class="w-[9vw] h-[9vw] bg-sky-100 rounded-full overflow-hidden">
               <img class="w-full h-full object-cover" src="/images/uploads/<%= post.user.picture %>" alt="">
             </div>
-            <h4 class="text-sm">
+            <a href="/profile/<%= post.user.username %>" class="text-sm">
               <%= post.user.username %>
-            </h4>
+            </a>
             <h6 class="text-xs opacity-30">
               <%= dater(new Date(post.date)) %>
             </h6>
+            
           </div>
           <div class="relative w-full h-96 mt-4 bg-sky-100 overflow-hidden">
             <img data-postid="<%= post.id %>" class="postimg w-full h-full object-cover"
@@ -74,8 +77,26 @@
             </span>
             <%= post.caption %>
           </h2>
+          
+          <form action="/post/<%= post._id %>/comment" method="post">
+            <input class="bg-transparent flex outline-none px-4 mt-2 text-sm" type="text" name="text" placeholder="Add a comment...">
+          </form>
+          <% if(post.comments.length === 0) { %>
+            <h6 class="px-4 mt-2 text-sm text-zinc-500">No Comments Yet.</h6>
+          <% } else { %>
+            <% post.comments.reverse().forEach(function(comment) { %>
+              <div class="title px-4 flex items-center gap-2">
+                <h2 class="text-white font-light text-sm mt-2">
+                  <span class="font-semibold pr-2">
+                    <%= comment.username %>
+                  </span>
+                  <%= comment.text %>
+                </h2>
+              </div>
+            <% }) %>
+          <% } %>
         </div>
-        <% }) %>
+      <% }) %>
     </div>
   </div>
 

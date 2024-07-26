@@ -19,6 +19,54 @@ router.get("/login", function (req, res) {
   res.render("login", { footer: false });
 });
 
+// router.post("/comment", async function (req, res) {
+//   const post = await postModel.findOne({ _id: req.params.postid });
+//   const user = await userModel.findOne({ username: req.session.passport.user });
+//   const comment = { 
+//     text : req.body.text,
+//     postedBy : req.user._id
+//    }
+//   post.comments.push(comment).populate("comments.postedBy", "_id name");
+//   await post.save();
+//   res.redirect("/feed");
+  
+// });
+
+router.post("/post/:postid/comment", async function (req, res) {
+  try {
+    // const post = await postModel.findOne({ _id : req.params.postid }).populate("comments.postedBy", "_id name");
+    const post = await postModel.findById(req.params.postid);
+    // console.log("Post", post);
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+
+    const user = await userModel.findOne({ username: req.session.passport.user });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    // console.log("User",user);
+    const comment = { 
+      text: req.body.text,
+      username: user.username,
+    }
+    // console.log("Comment",comment);
+
+    post.comments.push(comment);
+    await post.save();
+
+    // await post.populate({
+    //   path : 'comments.postedBy',
+    //   select : '_id username'
+    // }).execPopulate();
+    // res.render('post', { post });
+    res.redirect("/feed");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
 router.get("/like/:postid", async function (req, res) {
   const post = await postModel.findOne({ _id: req.params.postid });
   const user = await userModel.findOne({ username: req.session.passport.user });

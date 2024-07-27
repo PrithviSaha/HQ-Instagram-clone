@@ -4,16 +4,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressSession = require('express-session');
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const passport = require('passport');
+const MONGOURI = "mongodb+srv://prithvisaha:abcd@cluster0.tv5vez4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+try {
+  mongoose.connect(MONGOURI);
+  console.log("connected to MONGO DB");
+} catch (error) {
+  console.log("Not connected to MONGO DB");
+}
 
 app.use(expressSession({
   resave: false,

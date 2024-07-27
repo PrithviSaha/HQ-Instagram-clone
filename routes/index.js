@@ -19,6 +19,10 @@ router.get("/login", function (req, res) {
   res.render("login", { footer: false });
 });
 
+router.get("/hi", function(req,res) {
+  res.status(200).json({"message" : "hi"})
+})
+
 // router.post("/comment", async function (req, res) {
 //   const post = await postModel.findOne({ _id: req.params.postid });
 //   const user = await userModel.findOne({ username: req.session.passport.user });
